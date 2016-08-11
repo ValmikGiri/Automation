@@ -1,22 +1,22 @@
 # Automation
 TestAutomationSelenium
-
+OS- Microsoft Windows 2010
 
 Required Setups
 
-Microsoft Visual Studio 2010 or Higher
-Gallio Test Runner -GallioBundle-3.4.14.0
-Microsoft Office Excel 2010
+1.Microsoft Visual Studio 2010 or Higher
+2.Gallio Test Runner -GallioBundle-3.4.14.0
+3.Microsoft Office Excel 2010
 
 
 Refrences Needs To be added to visual studio
 
-Selenium Webdriver
-Selenium Webdriver Support
-gallio.dll
-MbUnit.dll
-Microsoft.Office.Interop.Excel
-Microsoft Office 14.0 Object Library
+1.Selenium Webdriver
+2.Selenium Webdriver Support
+3.gallio.dll
+4.MbUnit.dll
+5.Microsoft.Office.Interop.Excel
+6.Microsoft Office 14.0 Object Library
 
 @@@@@Running Test Using MbUnit
 Test Runner – Mbunit Framework (Gallio Icarus)
