@@ -1,0 +1,17 @@
+Required Setups
+
+Microsoft Visual Studio 2010 or Higher
+Gallio Test Runner -GallioBundle-3.4.14.0
+Microsoft Office Excel 2010
+
+
+Refrences Needs To be added to visual studio
+
+Selenium Webdriver
+Selenium Webdriver Support
+gallio.dll
+MbUnit.dll
+Microsoft.Office.Interop.Excel
+Microsoft Office 14.0 Object Library
+
+
