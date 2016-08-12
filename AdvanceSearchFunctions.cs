@@ -9,6 +9,8 @@ namespace AdvancedFindAutomation.PageDirectory
 {
     public class AdvanceSearchFunctions : BaseClass
     {
+        IWebDriver driver;
+
         public AdvanceSearchFunctions(IWebDriver driver)
         {
             PageFactory.InitElements(driver, this);
@@ -59,6 +61,36 @@ namespace AdvancedFindAutomation.PageDirectory
         [FindsBy(How = How.ClassName, Using = @"button grey")]
         //[CacheLookup]
         public IWebElement SearchNowButton { get; set; }
+
+
+        /// <summary>
+        /// Locator for Nothing Found Mesasage
+        /// </summary>
+        [FindsBy(How = How.Xpath, Using = @".//*[@id='mainContent']/div[2]/section/header/h1")]
+        //[CacheLookup]
+        public IWebElement NothingFoundText { get; set; }
+
+
+        /// <summary>
+        /// Locator for Post Type After Search
+        /// </summary>
+        [FindsBy(How = How.Xpath, Using = @".//h2[@class=""entry-title""]/span")]
+        //[CacheLookup]
+        public IWebElement PostTypeTextAfterSearch { get; set; }
+
+        /// <summary>
+        /// Locator for Searched Term
+        /// </summary>
+        [FindsBy(How = How.Xpath, Using = @".//h2[@class=""entry-title""]/a")]
+        //[CacheLookup]
+        public IWebElement SearchedTermOnMainPageText { get; set; }
+
+        /// <summary>
+        /// Locator for Searched Term On On Search Result Header
+        /// </summary>
+        [FindsBy(How = How.Xpath, Using = @".//*[@id='mainContent']/div[2]/section/header/h1")]
+        //[CacheLookup]
+        public IWebElement SearchedTermOnHeaderText { get; set; }
 
         //Method to search text on search text box
         /// <summary>
@@ -183,6 +215,74 @@ namespace AdvancedFindAutomation.PageDirectory
              {
                  TestLog.WriteLine("Exception Caught in Click Search  button method", e.ToString());
              }
+        }
+
+        //Verify Searched Text on page
+
+        /// <summary>
+        /// Verify Searched Term on Appropriate Page
+        /// </summary>
+        /// <param name="driver">WebDriver instance to pass on</param>
+        /// <param name="pExpectedSearchTerm">Expected Value of Searched Term on main page </param>
+        public void VerifySearchedTermTextOnMainPage(IWebDriver driver, string pExpectedSearchTerm)
+        {
+            try
+            {
+                if (pExpectedSearchTerm != null)
+                {
+
+                    string actualSearchedTerm = SearchedTermOnMainPageText.GetAttribute("innerText").ToString();
+                    VerifyStringResult(driver, pExpectedSearchTerm, actualSearchedTerm, "Expected and Actual Searched Term Values on main page are same", "Expected and Actual Searched Term values on main page are not same");
+                }
+            }
+            catch (Exception e)
+            {
+                TestLog.WriteLine("Exception Caught in Verify Seached Term Text method", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Verify Searched Term on Appropriate Page
+        /// </summary>
+        /// <param name="driver">WebDriver instance to pass on</param>
+        /// <param name="pExpectedHeader">Expected Value of Searched Term on Header </param>
+        public void VerifySearchedTermTextOnHeaderSection(IWebDriver driver, string pExpectedHeader)
+        {
+            try
+            {
+                if (pExpectedHeader != null)
+                {
+
+                    string actualHeader = SearchedTermOnMainPageText.GetAttribute("innerText").ToString();
+                    VerifyStringResult(driver, pExpectedHeader, actualHeader, "Expected and Actual Searched Term Values on Header are same", "Expected and Actual Searched Term values on Header are not same");
+                }
+            }
+            catch (Exception e)
+            {
+                TestLog.WriteLine("Exception Caught in Verify Seached Term On Header Text method", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Verify Nothing Found Text
+        /// </summary>
+        /// <param name="driver">WebDriver instance to pass on</param>
+        /// <param name="pExpectedNothingFound">Expected Value of Nothing Found </param>
+        public void VerifyNothingFoundMessageText(IWebDriver driver, string pExpectedNothingFound)
+        {
+            try
+            {
+                if (pExpectedNothingFound != null)
+                {
+
+                    string actualNothingFound = NothingFoundText.GetAttribute("innerText").ToString();
+                    VerifyStringResult(driver, pExpectedNothingFound, actualNothingFound, "Expected and Actual Nothing Found Message Values are same", "Expected and Actual Nothing Found Message values are not same");
+                }
+            }
+            catch (Exception e)
+            {
+                TestLog.WriteLine("Exception Caught in Verify Nothing Found Text method", e.ToString());
+            }
         }
 
         //Method to perform search operation in one go
