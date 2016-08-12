@@ -31,24 +31,38 @@ namespace AdvancedFindAutomation.PageDirectory
         }
 
         [Test]
-        public void TestCaseForAdvanceFindValidDetails()
+        public void TestCaseForAdvanceFindWithValidDetails()
         {
-            ReadFromExcel REx = new ReadFromExcel();
+           ReadFromExcel REx = new ReadFromExcel();
+            //Get Data From Excel Sheet For Entering it on Advace find section fields
+            string[] arrAdvanceFind = REx.ReadExcelData("AdvancedFind",3);
+            //To Launch Application with Chrome 
+            string[] arrBrowserName = REx.ReadExcelData("BrowserName", 4);
 
-            string[] arrAdvanceFind = REx.ReadExcelData("AdvancedFind", 3);
-
-            LaunchApplication(driver, "Chrome", URl);
+            //Launch application with defined browser and URL 
+            LaunchApplication(arrBrowserName[0], URl);
             
             AdvanceSearchFunctions AF = new AdvanceSearchFunctions(driver);
 
+            //Click On Search Button 
             AF.ClickOnSearchButton(driver);
             
+            //Enter Valid Data on Advanced find Section
             AF.EnterDataOnAdvanceSearchSection(driver, pSearchTerm: arrAdvanceFind[0], pReleventindustry: arrAdvanceFind[1], pResourceType: arrAdvanceFind[2], pYear: arrAdvanceFind[3]);
-            
+
+            //Click On Search Now Button On Advanced find Section 
             AF.ClickOnSearchNowButton(driver);
 
+            //Verify header text after searching term
+            AF.VerifySearchedTermTextOnHeaderSection(driver, arrAdvanceFind[0]);
 
-           // AF.EnterText(driver, arrAdvanceFind[0]);
+            //Verify Searched term text on main page after searching term
+            AF.VerifySearchedTermTextOnMainPage(driver, arrAdvanceFind[0]);
+
+            TestLog.End();
+           
+            //Quit Driver
+            driver.Quit();
         }
     }
 }
