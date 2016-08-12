@@ -18,6 +18,16 @@ Refrences Needs To be added to visual studio
 5.Microsoft.Office.Interop.Excel
 6.Microsoft Office 14.0 Object Library
 
+Class Files-
+1.BaseClass.cs- Parent Class
+2.ReadFromExcel.cs- class for Read Excel data(namespace AdvancedFindAutomation.TestData)
+3.AdvanceSearchFunctions.cs- Class For Locators and Methods(namespace AdvancedFindAutomation.PageDirectory.AdvancedFind)
+4.AdvancedFindWithInvalidDataTest.cs- Class For Test with Invalid Data (namespace-AdvancedFindAutomation.PageDirectory.AdvancedFind)
+5.AdvanceFindFunctionalityTestWithValidData.cs-Class For Test with Valid Data(namespace-AdvancedFindAutomation.PageDirectory.AdvancedFind)
+
+
+
+
 @@@@@Running Test Using MbUnit
 Test Runner – Mbunit Framework (Gallio Icarus)
 This document deals with 
