@@ -12,7 +12,7 @@ namespace AdvancedFindAutomation.PageDirectory
     [Author("Valmik")]
     [Importance(MbUnit.Framework.Importance.Serious)]
 
-    public class AdvanceFindFunctionalityTestWithValidData : BaseClass
+    public class AdvanceFindFunctionalityWithValidDataTest : BaseClass
     {
         //Tips And Documentation
         //[TestFixture] - This attribute declares that the class contains some test method
