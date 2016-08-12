@@ -6,43 +6,50 @@ namespace AdvancedFindAutomation.TestData
 {
     public class ReadFromExcel : BaseClass
     {
-        public String[] ReadExcelData(string oSheetName, int rowid)
+          static string strQuery = "";
+
+        public string[] ReadExcelData(string sheetName, int rowId)
         {
-            string connectionString = "Provider=Microsoft.JET.OLEDB.4.0;Data Source=Z:\\AdvancedFind\\AdvancedFindAutomation\\AdvancedFindAutomation\\TestData\\TestData.xls;Extended Properties=\"Excel 8.0;HDR=No;\"";
 
-            OleDbConnection connectin = new System.Data.OleDb.OleDbConnection(@connectionString);
+            string strExcelFile = @"E:\AdvancedFind\AdvancedFindAutomation\AdvancedFindAutomation\TestData\TestData.xlsx";
+            var connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + strExcelFile + @";Extended Properties=""Excel 12.0;IMEX=1;HDR=NO;TypeGuessRows=0;ImportMixedTypes=Text""";
 
-            DataTable dt = new DataTable();
+            OleDbDataAdapter Adapter = new OleDbDataAdapter();
+            OleDbConnection conn = new OleDbConnection(connectionString);
+            conn.Open();
 
-            String query = "SELECT * FROM [" + oSheetName + "$]";
+            DataTable ExcelSheets = conn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
 
-            String[] data = null;
-            try
+            switch (sheetName)
             {
-                connectin.Open();
-
-                OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, connectin);
-
-                DataSet ds = new DataSet();
-                dataAdapter.Fill(ds);
-                dt = ds.Tables[0];
-
-                data = new string[ds.Tables[0].Columns.Count];
-
-                for (int i = 0; i <= ds.Tables[0].Columns.Count; i++)
-                {
-                    data[i] = dt.Rows[rowid - 1][i + 1].ToString();
-                }
-
-                connectin.Close();
-                return data;
+                case "Browser":
+                    strQuery = "select * from [" + sheetName + "$A" + rowId + ":B" + rowId + "]";
+                    break;
+                case "AdvancedFind":
+                    strQuery = "select * from [" + sheetName + "$A" + rowId + ":G" + rowId + "]";
+                    break;
             }
-            catch (Exception e)
+
+            OleDbCommand cmd = new OleDbCommand(strQuery, conn);
+            Adapter.SelectCommand = cmd;
+            DataSet dsExcel = new DataSet();
+
+            Adapter.Fill(dsExcel);
+
+
+
+            cmd = null;
+            conn.Close();
+
+            string[] stringArray = new string[dsExcel.Tables[0].Columns.Count];
+            
+
+            for (int col = 0; col < dsExcel.Tables[0].Columns.Count; ++col)
             {
-                connectin.Close();
-
-                return data;
+                stringArray[col] = dsExcel.Tables[0].Rows[0][col].ToString();
             }
+
+            return stringArray;
         }
     }
 }
