@@ -92,9 +92,47 @@ namespace AdvancedFindAutomation.PageDirectory
         //[CacheLookup]
         public IWebElement SearchedTermOnHeaderText { get; set; }
 
+      /// <summary>
+        /// Scroll Down the page
+        /// </summary>
+        /// <param name="driver"></param>
+        public void ScrollDownPage(IWebDriver driver)
+        {
+            try
+            {
+            Actions actions = new Actions(driver);
+            actions.MoveToElement(SearchTermTextBox);
+            actions.Perform();
+            }
+            catch(Exception e)
+            {
+			TestLog.WriteLine("Exception Caught in Scroll Down the page method", e.ToString());
+            }
+		}
+
+         /// <summary>
+        /// Clicked On Advance Search Button
+        /// </summary>
+        /// <param name="driver"></param>
+        public void ClickOnSearchButton(IWebDriver driver)
+        {
+             try
+            {
+                SearchButton.Click();
+                ScrollDownPage(driver)
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(100));
+                wait.Until(ExpectedConditions.ElementIsVisible(By.Id(@"searchbox")));
+                TestLog.WriteLine("Clicked On Search  button");
+             }
+             catch (Exception e)
+             {
+                 TestLog.WriteLine("Exception Caught in Click Search  button method", e.ToString());
+             }
+        }
+        
         //Method to search text on search text box
         /// <summary>
-        /// 
+        /// Search text
         /// </summary>
         /// <param name="driver"></param>
         /// <param name="ptext"></param>
@@ -198,24 +236,7 @@ namespace AdvancedFindAutomation.PageDirectory
              }
         }
 
-         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="driver"></param>
-        public void ClickOnSearchButton(IWebDriver driver)
-        {
-             try
-            {
-                  SearchButton.Click();
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(100));
-                wait.Until(ExpectedConditions.ElementIsVisible(By.Id(@"searchbox")));
-                   TestLog.WriteLine("Clicked On Search  button");
-             }
-             catch (Exception e)
-             {
-                 TestLog.WriteLine("Exception Caught in Click Search  button method", e.ToString());
-             }
-        }
+        
 
         //Verify Searched Text on page
 
