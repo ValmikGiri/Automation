@@ -16,20 +16,20 @@ using MbUnit.Framework;
 using OpenQA.Selenium.Remote;
 using System.Drawing.Imaging;
 
-namespace AdvancedFindAutomation
+namespace TestApp
 {
     public class BaseClass
     {
-        
+
         public IWebDriver driver;
 
         //Public string for URl and Webrdriver Path
         //Public string for URl and Webrdriver Path
         public string URl = "http://www.microlise.com";
-        public string ChromeDriverPath = @"E:\AdvancedFind\AdvancedFindAutomation\packages\Selenium.WebDriver.ChromeDriver.2.23.0.1\driver";
-        public string IEDriverPath = @"E:\AdvancedFind\AdvancedFindAutomation\packages\Selenium.WebDriver.IEDriver.2.53.1.1\driver";
-        public static string ScreenShotPath = @"E:\AdvancedFind\ScreenShot";
-        public string TestDataFile = @"E:\AdvancedFind\AdvancedFindAutomation\AdvancedFindAutomation\TestData\TestData.xlsx";
+        public string ChromeDriverPath = @"E:\AutomationFramework\ValmikAutomation\packages\Selenium.WebDriver.ChromeDriver.2.23.0.1\driver";
+        public string IEDriverPath = @"E:\AutomationFramework\ValmikAutomation\packages\Selenium.WebDriver.IEDriver.2.53.1.1\driver";
+        public static string ScreenShotPath = @"E:\AutomationFramework\ScreenShot";
+        public string TestDataFile = @"E:\AutomationFramework\ValmikAutomation\TestData\TestData.xlsx";
         public string BrowserName;
         public StringBuilder verificationErrors;
         public static bool FinalResult = true;
@@ -44,7 +44,7 @@ namespace AdvancedFindAutomation
         {
             try
             {
-                if (pBrowserName == "Chrome")
+                if (pBrowserName =="Chrome")
                 {
                     //initializing Chrome driver
                     driver = new ChromeDriver(ChromeDriverPath);
@@ -58,6 +58,7 @@ namespace AdvancedFindAutomation
                 //Enter url 
 
                 driver.Navigate().GoToUrl(pURL);
+                driver.Manage().Window.Maximize();
             }
             catch (Exception e)
             {

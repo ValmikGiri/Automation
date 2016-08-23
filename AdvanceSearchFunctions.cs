@@ -4,17 +4,18 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using Gallio.Framework;
+using OpenQA.Selenium.Interactions;
 
-namespace AdvancedFindAutomation.PageDirectory
+namespace TestApp.PageDirectory.AdvancedFind
 {
     public class AdvanceSearchFunctions : BaseClass
     {
-        IWebDriver driver;
+        //IWebDriver driver;
 
         public AdvanceSearchFunctions(IWebDriver driver)
         {
             PageFactory.InitElements(driver, this);
-            this.driver = driver;
+           
         }
 
         //******* Locators For Search button *******//
@@ -29,7 +30,7 @@ namespace AdvancedFindAutomation.PageDirectory
         /// <summary>
         /// Locator for search Term Text Box
         /// </summary>
-        [FindsBy(How = How.Id, Using = @"searchbox")]
+        [FindsBy(How = How.XPath, Using = @".//*[@id='searchsubmit']")]
         //[CacheLookup]
         public IWebElement SearchTermTextBox { get; set; }
 
@@ -66,7 +67,7 @@ namespace AdvancedFindAutomation.PageDirectory
         /// <summary>
         /// Locator for Nothing Found Mesasage
         /// </summary>
-        [FindsBy(How = How.Xpath, Using = @".//*[@id='mainContent']/div[2]/section/header/h1")]
+        [FindsBy(How = How.XPath, Using = @".//*[@id='mainContent']/div[2]/section/header/h1")]
         //[CacheLookup]
         public IWebElement NothingFoundText { get; set; }
 
@@ -74,65 +75,27 @@ namespace AdvancedFindAutomation.PageDirectory
         /// <summary>
         /// Locator for Post Type After Search
         /// </summary>
-        [FindsBy(How = How.Xpath, Using = @".//h2[@class=""entry-title""]/span")]
+        [FindsBy(How = How.XPath, Using = @".//h2[@class=""entry-title""]/span")]
         //[CacheLookup]
         public IWebElement PostTypeTextAfterSearch { get; set; }
 
         /// <summary>
         /// Locator for Searched Term
         /// </summary>
-        [FindsBy(How = How.Xpath, Using = @".//h2[@class=""entry-title""]/a")]
+        [FindsBy(How = How.XPath, Using = @".//h2[@class=""entry-title""]/a")]
         //[CacheLookup]
         public IWebElement SearchedTermOnMainPageText { get; set; }
 
         /// <summary>
         /// Locator for Searched Term On On Search Result Header
         /// </summary>
-        [FindsBy(How = How.Xpath, Using = @".//*[@id='mainContent']/div[2]/section/header/h1")]
+        [FindsBy(How = How.XPath, Using = @".//*[@id='mainContent']/div[2]/section/header/h1")]
         //[CacheLookup]
         public IWebElement SearchedTermOnHeaderText { get; set; }
 
-      /// <summary>
-        /// Scroll Down the page
-        /// </summary>
-        /// <param name="driver"></param>
-        public void ScrollDownPage(IWebDriver driver)
-        {
-            try
-            {
-            Actions actions = new Actions(driver);
-            actions.MoveToElement(SearchTermTextBox);
-            actions.Perform();
-            }
-            catch(Exception e)
-            {
-			TestLog.WriteLine("Exception Caught in Scroll Down the page method", e.ToString());
-            }
-		}
-
-         /// <summary>
-        /// Clicked On Advance Search Button
-        /// </summary>
-        /// <param name="driver"></param>
-        public void ClickOnSearchButton(IWebDriver driver)
-        {
-             try
-            {
-                SearchButton.Click();
-                ScrollDownPage(driver)
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(100));
-                wait.Until(ExpectedConditions.ElementIsVisible(By.Id(@"searchbox")));
-                TestLog.WriteLine("Clicked On Search  button");
-             }
-             catch (Exception e)
-             {
-                 TestLog.WriteLine("Exception Caught in Click Search  button method", e.ToString());
-             }
-        }
-        
         //Method to search text on search text box
         /// <summary>
-        /// Search text
+        /// 
         /// </summary>
         /// <param name="driver"></param>
         /// <param name="ptext"></param>
@@ -165,6 +128,7 @@ namespace AdvancedFindAutomation.PageDirectory
             {
                 if (pIndustry != null)
                 {
+                    ReleventIndustryDropDown.Click();
                     new SelectElement(ReleventIndustryDropDown).SelectByText(pIndustry);
                     TestLog.WriteLine("Selected relevent industry as [ {0} ]", pIndustry);
                 }
@@ -187,7 +151,8 @@ namespace AdvancedFindAutomation.PageDirectory
             {
                 if (pResourceType != null)
                 {
-                    new SelectElement(ReleventIndustryDropDown).SelectByText(pResourceType);
+                    ResourceTypeDropDown.Click();
+                    new SelectElement(ResourceTypeDropDown).SelectByText(pResourceType);
                     TestLog.WriteLine("Selected Resource Type as [ {0} ]", pResourceType);
                 }
             }
@@ -209,6 +174,7 @@ namespace AdvancedFindAutomation.PageDirectory
             {
                 if (pYear != null)
                 {
+                    yearTypeDropDown.Click();
                     new SelectElement(ReleventIndustryDropDown).SelectByText(pYear);
                     TestLog.WriteLine("Selected Year as [ {0} ]", pYear);
                 }
@@ -224,19 +190,40 @@ namespace AdvancedFindAutomation.PageDirectory
         /// <param name="driver"></param>
         public void ClickOnSearchNowButton(IWebDriver driver)
         {
-             try
+            try
             {
-                  SearchNowButton.Click();
-                 Thread.Sleep(500);
-                   TestLog.WriteLine("Clicked On Search now button");
-             }
-             catch (Exception e)
-             {
-                 TestLog.WriteLine("Exception Caught in Click Search now button method", e.ToString());
-             }
+                SearchNowButton.Click();
+                Thread.Sleep(500);
+                TestLog.WriteLine("Clicked On Search now button");
+            }
+            catch (Exception e)
+            {
+                TestLog.WriteLine("Exception Caught in Click Search now button method", e.ToString());
+            }
         }
 
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driver"></param>
+        public void ClickOnSearchButton(IWebDriver driver)
+        {
+            try
+            {
+                SearchButton.Click();
+                Actions Scroll = new Actions(driver);
+                Scroll.MoveToElement(SearchedTermOnMainPageText);
+                Scroll.Click();
+                Scroll.Perform();
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(100));
+                wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(@".//*[@id='searchbox']")));
+                TestLog.WriteLine("Clicked On Search  button");
+            }
+            catch (Exception e)
+            {
+                TestLog.WriteLine("Exception Caught in Click Search  button method", e.ToString());
+            }
+        }
 
         //Verify Searched Text on page
 
@@ -308,16 +295,16 @@ namespace AdvancedFindAutomation.PageDirectory
 
         //Method to perform search operation in one go
 
-        public void EnterDataOnAdvanceSearchSection(IWebDriver driver,string pSearchTerm,string pReleventindustry,string pResourceType,string pYear)
+        public void EnterDataOnAdvanceSearchSection(IWebDriver driver, string pSearchTerm, string pReleventindustry, string pResourceType, string pYear)
         {
             try
             {
-                EnterTextInSearchTextBox(driver,pSearchTerm);
-                SelectValueInReleventIndustryDropDown(driver,pReleventindustry);
-                SelectValueInResourceTypeDropDown(driver,pResourceType);
-                SelectValueInYearDropDown(driver,pYear);
+                EnterTextInSearchTextBox(driver, pSearchTerm);
+                SelectValueInReleventIndustryDropDown(driver, pReleventindustry);
+                SelectValueInResourceTypeDropDown(driver, pResourceType);
+                SelectValueInYearDropDown(driver, pYear);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 TestLog.WriteLine("Exception Caught in Enter Data On Advanced Search method", e.ToString());
             }
