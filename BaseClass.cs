@@ -15,6 +15,8 @@ using Gallio.Framework;
 using MbUnit.Framework;
 using OpenQA.Selenium.Remote;
 using System.Drawing.Imaging;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace AdvancedFindAutomation
 {
@@ -52,7 +54,7 @@ namespace AdvancedFindAutomation
                 if (pBrowserName == "IE")
                 {
                     //initializing Chrome driver
-                    driver = new ChromeDriver(IEDriverPath);
+                    driver = new IEDriver(IEDriverPath);
                 }
 
                 //Enter url 
@@ -145,6 +147,135 @@ namespace AdvancedFindAutomation
                 return builder.ToString().ToLower();
             return builder.ToString();
         }
-
     }
+    
+        
+        //Class And Methods Foe reading data base values
+        
+        
+             //############################# DataBaseVerification ####################################
+        public bool CheckDb = false;
+        public string DBInstance = "";
+        public static string DBName="";
+        public string DBUserName = "";
+        public string DBPassword = "";
+/// <summary>
+    /// Data base Verification
+    /// </summary>
+    public class DBVerificationFunction :BaseClass
+    {
+        //String variable to store Value From Database
+        public string ActualData;
+	/// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DBData"></param>
+        public DataSet DBConnection(string pQueryString)
+        {
+            try
+            {
+                if (CheckDb)
+                {
+                    string connectionString =
+                    "Data Source='" + DBInstance + "';Initial Catalog='" + DBName + "';"
+                    + "Integrated Security=false;User Id='" + DBUserName + "';Password='" + DBPassword + "';";
+
+                    // Create and open the connection in a using block. 
+                    using (SqlConnection connection =
+                    new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        SqlDataAdapter dadapter = new SqlDataAdapter();
+                        dadapter.SelectCommand = new SqlCommand(pQueryString, connection);
+                        DataSet dset = new DataSet();
+                        dadapter.Fill(dset);
+                        return dset;
+                    }
+
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                TestLog.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="DBData"></param>
+        /// <param name="dset"></param>
+        public void VerifyData(IWebDriver driver, string[] DBData, DataSet dset)
+        {
+            if (CheckDb)
+            {
+                string pColoumnName, pExpectedValue;
+                pColoumnName = DBData[0];
+                pExpectedValue = DBData[1];
+
+                try
+                {
+                    if (dset != null && dset.Tables.Count >= 1 && dset.Tables[0].Rows.Count >= 1)
+                    {
+                        var ActualResults = dset.Tables[0].Rows[0][pColoumnName];
+                        string Act = ActualResults.ToString();                                             
+                        
+                        //Verify Expected  data on UI with Actual Data From DB
+                        VerifyStringResult(driver, pExpectedValue, Act, "Expected and Actual database values of " + pColoumnName + " are same", "Expected and Actual database values of " + pColoumnName + " are not same");                        
+
+                    }
+                    else
+                    {
+                        TestLog.WriteLine("Data not saved in database");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    TestLog.WriteLine(ex.Message);
+                }
+
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="DBData"></param>
+        /// <param name="dset"></param>
+        public string GetColumnData(IWebDriver driver, string pColoumnName, DataSet dset)
+        {       
+           
+                try
+                {   
+                    if (CheckDb)
+                  {
+                    if (dset != null && dset.Tables.Count >= 1 && dset.Tables[0].Rows.Count >= 1)
+                    {
+                        var ActualResults = dset.Tables[0].Rows[0][pColoumnName];
+                        string Act = ActualResults.ToString();
+                        return Act;
+                    }
+                  
+                }
+                      return null;
+                }
+                
+                catch (Exception ex)
+                {
+                    TestLog.WriteLine(ex.Message);
+                    return null;
+                }
+             
+            }
+			}
+			}
+        
+
+    
 }
